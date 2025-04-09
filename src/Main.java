@@ -1,23 +1,32 @@
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
         Main main = new Main();
-        System.out.println(main.minOperations(new int[] {5,2,5,4,5}, 2));
+        System.out.println(Arrays.toString(main.twoSum(new int[] {3, 3}, 6)));
     }
 
     public int[] twoSum(int[] nums, int target) {
         /*
-            题目：
+            题目：1. 两数之和
             链接：https://leetcode.cn/problems/two-sum/description/
             难度：简单
             思路：双指针遍历
-
-            可优化：
+            时间：2025年4月9日22:03:31
+            优化：使用哈希表，可以将寻找 target - x 的时间复杂度降低到从 O(N) 降低到 O(1)
          */
 
-        return new int[] {0,0};
+        for (int i = 0; i < nums.length - 1; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] + nums[j] == target) {
+                    return new int[] {i, j};
+                }
+            }
+        }
+
+        return new int[0];
     }
 
     public int minOperations(int[] nums, int k) {
