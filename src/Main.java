@@ -16,6 +16,7 @@ public class Main {
             思路：双指针遍历
             时间：2025年4月9日22:03:31
             优化：使用哈希表，可以将寻找 target - x 的时间复杂度降低到从 O(N) 降低到 O(1)
+            调试：System.out.println(Arrays.toString(main.twoSum(new int[] {3, 3}, 6)));
          */
 
         for (int i = 0; i < nums.length - 1; i++) {
