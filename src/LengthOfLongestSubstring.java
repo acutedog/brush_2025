@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class LengthOfLongestSubstring {
@@ -10,6 +11,7 @@ public class LengthOfLongestSubstring {
         示例："pwwkew" --> 3
         思路：HashMap + 滑动窗口
         时间：2025年4月18日19:56:17
+        限制：0 <= s.length <= 5 * 10^4。s 由英文字母、数字、符号和空格组成。
      */
 
 
@@ -17,18 +19,32 @@ public class LengthOfLongestSubstring {
         LengthOfLongestSubstring length = new LengthOfLongestSubstring();
         System.out.println(length.lengthOfLongestSubstring("abcabcbb"));
         System.out.println(length.lengthOfLongestSubstring("pwwkew"));
+        System.out.println(length.lengthOfLongestSubstring(" "));
+        System.out.println(length.lengthOfLongestSubstring("aa"));
+        System.out.println(length.lengthOfLongestSubstring("au"));
+        System.out.println(length.lengthOfLongestSubstring("abba"));
     }
 
     public int lengthOfLongestSubstring(String s) {
+        if (s.isEmpty() || s.length() == 1) {
+            return s.length();
+        }
         int res = 0;
         int left = 0;
         Map<Character, Integer> map = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
             if (map.containsKey(s.charAt(i))) {
-                res = Math.max(res, i - left);
                 left = map.get(s.charAt(i)) + 1;
+                Iterator<Map.Entry<Character, Integer>> iterator = map.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<Character, Integer> entry = iterator.next();
+                    if (entry.getValue() < map.get(s.charAt(i))) {
+                        iterator.remove();
+                    }
+                }
             }
             map.put(s.charAt(i), i);
+            res = Math.max(res, i - left + 1);
         }
         return res;
     }
