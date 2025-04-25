@@ -16,38 +16,19 @@ public class CountInterestingSubarrays {
     }
 
     public long countInterestingSubarrays(List<Integer> nums, int modulo, int k) {
-        int result = 0;
-        Map<Integer, Integer> map = new HashMap<>();
-        int validCount = 0, invalidCount = 0, index = 0;
-        for (int num : nums) {
-            if (num % modulo == k) {
-                validCount++;
-                map.put(validCount, index);
-                if (k == 0) {
-                    result += (invalidCount + 1) * invalidCount / 2;
-                    invalidCount = 0;
-                }
-            } else {
-                invalidCount++;
-            }
-            index++;
-        }
+        /*
+            (sum[r] − sum[l−1]) % modulo = k 变换为
+            (sum[r] − k + modulo) % modulo = sum[l−1] % modulo
+         */
 
-        if (k == 0) {
-            result += (invalidCount + 1) * invalidCount / 2;
-        }
-
-        int count = 1;
-        while (count <= validCount) {
-            if (count % modulo == k) {
-                for (int i = 1; i <= validCount - count + 1; i++) {
-                    int leftInvalid = i == 1 ? map.get(i) : map.get(i) - map.get(i - 1) - 1;
-                    int rightInvalid = i == validCount - count + 1 ?
-                            nums.size() - map.get(validCount) - 1 : (map.get(i + count) - map.get(i + count - 1) - 1);
-                    result += (leftInvalid + 1) * (rightInvalid + 1);
-                }
-            }
-            count++;
+        long result = 0;
+        HashMap<Integer, Integer> cnt = new HashMap<>();
+        int prefix = 0;
+        cnt.put(0, 1);
+        for (int i = 0; i < nums.size(); i++) {
+            prefix += nums.get(i) % modulo == k ? 1 : 0;
+            result += cnt.getOrDefault((prefix - k + modulo) % modulo, 0);
+            cnt.put(prefix % modulo, cnt.getOrDefault(prefix % modulo, 0) + 1);
         }
         return result;
     }
