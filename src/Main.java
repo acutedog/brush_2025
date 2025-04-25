@@ -1,11 +1,13 @@
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Main main = new Main();
-        System.out.println(Arrays.toString(main.twoSum(new int[] {3, 3}, 6)));
+        int count = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(count, 0);
+        count++;
+        map.put(count, 4);
+        System.out.println(map);
     }
 
     public int[] twoSum(int[] nums, int target) {
