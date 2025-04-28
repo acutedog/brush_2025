@@ -7,6 +7,9 @@ public class CountSubarrays {
         System.out.println(main.countSubarrays(new int[]{1,2,1,4,1}));
         System.out.println(main.countSubarrays(new int[]{1,1,1}));
         System.out.println(main.countSubarrays(new int[]{1,4,1}));
+        System.out.println(main.countSubarrays(new int[]{2,1,4,3,5}, 10));
+        System.out.println(main.countSubarrays(new int[]{1,1,1}, 5));
+        System.out.println(main.countSubarrays(new int[]{9,5,3,8,4,7,2,7,4,5,4,9,1,4,8,10,8,10,4}, 4));
     }
 
     public long countSubarrays(int[] nums, int minK, int maxK) {
@@ -55,5 +58,45 @@ public class CountSubarrays {
         }
 
         return res;
+    }
+
+    public long countSubarrays(int[] nums, long k) {
+         /*
+            题目：2302. 统计得分小于 K 的子数组数目
+            链接：https://leetcode.cn/problems/count-subarrays-with-score-less-than-k/description/?envType=daily-question&envId=2025-04-28
+            难度：困难
+            描述1：[1, 2, 3, 4, 5] 的分数为 (1 + 2 + 3 + 4 + 5) * 5 = 75。
+            描述2：给你一个正整数数组nums和一个整数 k ，请你返回nums中分数严格小于k的非空整数子数组数目
+            时间：2025年4月28日22:11:41
+            思路：从i=0到i=len-1依次遍历，记录下i-1有效的边界，防止重复
+         */
+
+        long result = 0;
+        int right = 0;
+        long sum = nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            if (right < i) {
+                right = i;
+                sum += nums[i];
+            }
+            boolean inCircle = false;
+            while (sum * (right - i + 1) < k && right < nums.length - 1) {
+                right++;
+                sum += nums[right];
+                inCircle = true;
+            }
+
+            if (!inCircle && sum * (right - i + 1) >= k) {
+                right--;
+            }
+
+            if (!(right == nums.length - 1 && sum * (right - i + 1) < k) && inCircle) {
+                sum -= nums[right];
+                right--;
+            }
+            sum -= nums[i];
+            result += Math.max(0, right - i + 1);
+        }
+        return result;
     }
 }
