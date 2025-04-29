@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class CountSubarrays {
 
 
@@ -7,9 +10,8 @@ public class CountSubarrays {
         System.out.println(main.countSubarrays(new int[]{1,2,1,4,1}));
         System.out.println(main.countSubarrays(new int[]{1,1,1}));
         System.out.println(main.countSubarrays(new int[]{1,4,1}));
-        System.out.println(main.countSubarrays(new int[]{2,1,4,3,5}, 10));
-        System.out.println(main.countSubarrays(new int[]{1,1,1}, 5));
-        System.out.println(main.countSubarrays(new int[]{9,5,3,8,4,7,2,7,4,5,4,9,1,4,8,10,8,10,4}, 4));
+        System.out.println(main.countSubarrays(new int[]{1,3,2,3,3}, 2));
+        System.out.println(main.countSubarrays(new int[]{1,4,2,1}, 3));
     }
 
     public long countSubarrays(int[] nums, int minK, int maxK) {
@@ -97,6 +99,43 @@ public class CountSubarrays {
             sum -= nums[i];
             result += Math.max(0, right - i + 1);
         }
+        return result;
+    }
+
+    public long countSubarrays(int[] nums, int k) {
+         /*
+            题目：2962. 统计最大元素出现至少 K 次的子数组
+            链接：https://leetcode.cn/problems/count-subarrays-where-max-element-appears-at-least-k-times/description/?envType=daily-question&envId=2025-04-29
+            难度：中等
+            描述1：给你一个整数数组 nums 和一个 正整数 k 。
+            描述2：请你统计有多少满足nums中的最大元素至少出现k次的子数组，并返回满足这一条件的子数组的数目
+            时间：2025年4月29日21:48:18
+         */
+
+        long result = 0;
+        int max = nums[0];
+        List<Integer> list = new ArrayList<>();
+        list.add(0);
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == max) {
+                list.add(i);
+            } else if (nums[i] > max) {
+                list = new ArrayList<>();
+                list.add(i);
+                max = nums[i];
+            }
+        }
+
+        if (list.size() < k) {
+            return 0;
+        }
+
+        for (int i = 0; i <= list.size() - k; i++) {
+            int left = i > 0 ? list.get(i) - list.get(i - 1) - 1 : list.get(i);
+            int right = nums.length - 1 - list.get(i + k - 1);
+            result += (long) (left + 1) * (right + 1);
+        }
+
         return result;
     }
 }
